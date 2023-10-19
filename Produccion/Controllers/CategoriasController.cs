@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Produccion.Models;
+using Producciones.Models;
 
-namespace Produccion.Controllers
+namespace Producciones.Controllers
 {
     public class CategoriasController : Controller
     {

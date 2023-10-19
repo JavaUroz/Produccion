@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Produccion.Models;
+using Producciones.Models;
 using System.Diagnostics;
 
-namespace Produccion.Controllers
+namespace Producciones.Controllers
 {
     public class HomeController : Controller
     {

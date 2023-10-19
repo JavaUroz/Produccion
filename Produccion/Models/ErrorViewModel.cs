@@ -1,5 +1,5 @@
-using Produccion.Models;
-namespace Produccion.Models
+using Producciones.Models;
+namespace Producciones.Models
 {
     public class ErrorViewModel
     {

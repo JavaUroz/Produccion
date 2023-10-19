@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Produccion.Migrations
+namespace Producciones.Migrations
 {
     public partial class UpdateCreated : Migration
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Produccion.Models
+namespace Producciones.Models
 {
     public partial class Estado
     {

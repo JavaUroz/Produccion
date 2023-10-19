@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Produccion.Models
+namespace Producciones.Models
 {
     public partial class ApplicationDbContext : IdentityDbContext
     {
