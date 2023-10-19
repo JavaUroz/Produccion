@@ -1,3 +1,4 @@
+using Produccion.Models;
 namespace Produccion.Models
 {
     public class ErrorViewModel

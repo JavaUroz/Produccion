@@ -12,8 +12,8 @@ using Produccion.Models;
 namespace Produccion.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230925182909_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20231019115954_UpdateCreated")]
+    partial class UpdateCreated
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

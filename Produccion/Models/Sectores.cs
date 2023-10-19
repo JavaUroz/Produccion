@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Produccion.Models
 {
@@ -10,8 +12,10 @@ namespace Produccion.Models
             Articulos = new HashSet<Articulo>();
             Usuarios = new HashSet<Usuario>();
         }
-
+        [Key]
         public int IdSector { get; set; }
+        [Required]
+        [DisplayName("Sector")]
         public string Descripcion { get; set; } = null!;
 
         public virtual ICollection<Articulo> Articulos { get; set; }
