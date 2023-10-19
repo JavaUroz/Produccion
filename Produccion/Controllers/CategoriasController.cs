@@ -9,90 +9,87 @@ using Produccion.Models;
 
 namespace Produccion.Controllers
 {
-    public class ArticulosController : Controller
+    public class CategoriasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ArticulosController(ApplicationDbContext context)
+        public CategoriasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Articulos
+        // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Articulos.Include(a => a.Sector);
-            return View(await applicationDbContext.ToListAsync());
+              return _context.Categorias != null ? 
+                          View(await _context.Categorias.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Categorias'  is null.");
         }
 
-        // GET: Articulos/Details/5
+        // GET: Categorias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Articulos == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
 
-            var articulo = await _context.Articulos
-                .Include(a => a.Sector)
-                .FirstOrDefaultAsync(m => m.IdArticulo == id);
-            if (articulo == null)
+            var categoria = await _context.Categorias
+                .FirstOrDefaultAsync(m => m.IdCategoria == id);
+            if (categoria == null)
             {
                 return NotFound();
             }
 
-            return View(articulo);
+            return View(categoria);
         }
 
-        // GET: Articulos/Create
+        // GET: Categorias/Create
         public IActionResult Create()
         {
-            ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion");
             return View();
         }
 
-        // POST: Articulos/Create
+        // POST: Categorias/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdArticulo,Codigo,Nombre,SectorId")] Articulo articulo)
+        public async Task<IActionResult> Create([Bind("IdCategoria,Denominacion")] Categoria categoria)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(articulo);
+                _context.Add(categoria);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-            return View(articulo);
+            return View(categoria);
         }
 
-        // GET: Articulos/Edit/5
+        // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Articulos == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
 
-            var articulo = await _context.Articulos.FindAsync(id);
-            if (articulo == null)
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null)
             {
                 return NotFound();
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-            return View(articulo);
+            return View(categoria);
         }
 
-        // POST: Articulos/Edit/5
+        // POST: Categorias/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdArticulo,Codigo,Nombre,SectorId")] Articulo articulo)
+        public async Task<IActionResult> Edit(int id, [Bind("IdCategoria,Denominacion")] Categoria categoria)
         {
-            if (id != articulo.IdArticulo)
+            if (id != categoria.IdCategoria)
             {
                 return NotFound();
             }
@@ -101,12 +98,12 @@ namespace Produccion.Controllers
             {
                 try
                 {
-                    _context.Update(articulo);
+                    _context.Update(categoria);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArticuloExists(articulo.IdArticulo))
+                    if (!CategoriaExists(categoria.IdCategoria))
                     {
                         return NotFound();
                     }
@@ -117,51 +114,49 @@ namespace Produccion.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-            return View(articulo);
+            return View(categoria);
         }
 
-        // GET: Articulos/Delete/5
+        // GET: Categorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Articulos == null)
+            if (id == null || _context.Categorias == null)
             {
                 return NotFound();
             }
 
-            var articulo = await _context.Articulos
-                .Include(a => a.Sector)
-                .FirstOrDefaultAsync(m => m.IdArticulo == id);
-            if (articulo == null)
+            var categoria = await _context.Categorias
+                .FirstOrDefaultAsync(m => m.IdCategoria == id);
+            if (categoria == null)
             {
                 return NotFound();
             }
 
-            return View(articulo);
+            return View(categoria);
         }
 
-        // POST: Articulos/Delete/5
+        // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Articulos == null)
+            if (_context.Categorias == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Articulos'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Categorias'  is null.");
             }
-            var articulo = await _context.Articulos.FindAsync(id);
-            if (articulo != null)
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria != null)
             {
-                _context.Articulos.Remove(articulo);
+                _context.Categorias.Remove(categoria);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArticuloExists(int id)
+        private bool CategoriaExists(int id)
         {
-            return (_context.Articulos?.Any(e => e.IdArticulo == id)).GetValueOrDefault();
+          return (_context.Categorias?.Any(e => e.IdCategoria == id)).GetValueOrDefault();
         }
     }
 }
