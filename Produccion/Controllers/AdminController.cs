@@ -42,7 +42,7 @@ namespace Producciones.Controllers
         }
         public async Task<IActionResult> Update(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            Usuario user = await userManager.FindByIdAsync(id);
             if (user != null)
                 return View(user);
             else
