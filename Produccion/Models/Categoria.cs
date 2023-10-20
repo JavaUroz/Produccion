@@ -9,7 +9,7 @@ namespace Producciones.Models
     {
         public Categoria()
         {
-            Usuarios = new HashSet<Usuario>();
+            Usuarios = new HashSet<Usuarios>();
         }
         [Key]
         public int IdCategoria { get; set; }
@@ -17,6 +17,6 @@ namespace Producciones.Models
         [DisplayName("Categoría")]
         public string Denominacion { get; set; } = null!;
 
-        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<Usuarios> Usuarios { get; set; }
     }
 }

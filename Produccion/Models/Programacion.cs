@@ -35,7 +35,7 @@ namespace Producciones.Models
         public virtual Articulo? Articulo { get; set; } = null!;
         public virtual Estado? Estado { get; set; } = null!;
         public virtual Proceso? Proceso { get; set; } = null!;
-        public virtual Usuario? SupervisorNavigation { get; set; } = null!;
+        public virtual Usuarios? SupervisorNavigation { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; }
     }
 }

@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Producciones.Models;
 
-namespace Producciones.Models
+namespace Producciones.Data
 {
-    public partial class ApplicationDbContext : IdentityDbContext
+    public partial class ApplicationDbContext : IdentityDbContext <Usuarios>
     {
         public ApplicationDbContext()
         {
@@ -25,7 +26,7 @@ namespace Producciones.Models
         public virtual DbSet<Produccion> Produccions { get; set; } = null!;
         public virtual DbSet<Programacion> Programacions { get; set; } = null!;
         public virtual DbSet<Sectores> Sectores { get; set; } = null!;
-        public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
+        public virtual DbSet<Usuarios> Usuarios { get; set; } = null!;
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -158,7 +159,7 @@ namespace Producciones.Models
             modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
             modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
 
-            modelBuilder.Entity<Usuario>(entity =>
+            modelBuilder.Entity<Usuarios>(entity =>
             {
                 //entity.HasKey(e => e.IdUser)
                 //    .HasName("PK__Usuarios__1788CCACD1CB2D57");

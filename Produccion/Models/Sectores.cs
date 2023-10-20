@@ -10,7 +10,7 @@ namespace Producciones.Models
         public Sectores()
         {
             Articulos = new HashSet<Articulo>();
-            Usuarios = new HashSet<Usuario>();
+            Usuarios = new HashSet<Usuarios>();
         }
         [Key]
         public int IdSector { get; set; }
@@ -19,6 +19,6 @@ namespace Producciones.Models
         public string Descripcion { get; set; } = null!;
 
         public virtual ICollection<Articulo> Articulos { get; set; }
-        public virtual ICollection<Usuario> Usuarios { get; set; }
+        public virtual ICollection<Usuarios> Usuarios { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Producciones.Migrations
 {
-    public partial class UpdateCreated : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -163,14 +163,16 @@ namespace Producciones.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    SectorId = table.Column<int>(type: "int", nullable: true),
-                    CategoriaId = table.Column<int>(type: "int", nullable: true),
+                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectorId = table.Column<int>(type: "int", nullable: false),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false),
+                    Autorizado = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -188,7 +190,7 @@ namespace Producciones.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                     table.ForeignKey(
                         name: "FK__Usuarios__IdCate__4AB81AF0",
                         column: x => x.CategoriaId,
@@ -236,7 +238,7 @@ namespace Producciones.Migrations
                     table.ForeignKey(
                         name: "FK_Programacion_Usuarios1",
                         column: x => x.Supervisor,
-                        principalTable: "Users",
+                        principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
 
@@ -264,7 +266,7 @@ namespace Producciones.Migrations
                     table.ForeignKey(
                         name: "FK_Produccion_Usuarios",
                         column: x => x.Responsable,
-                        principalTable: "Users",
+                        principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
 
@@ -304,14 +306,14 @@ namespace Producciones.Migrations
                 column: "Supervisor");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_SectorId",
-                table: "Users",
-                column: "SectorId");
+                name: "IX_Usuarios_CategoriaId",
+                table: "Usuarios",
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_CategoriaId",
-                table: "Users",
-                column: "CategoriaId");
+                name: "IX_Usuarios_SectorId",
+                table: "Usuarios",
+                column: "SectorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -350,7 +352,7 @@ namespace Producciones.Migrations
                 name: "Procesos");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Usuarios");
 
             migrationBuilder.DropTable(
                 name: "Categorias");

@@ -26,6 +26,6 @@ namespace Producciones.Models
         public byte[]? Foto { get; set; }
 
         public virtual Programacion? Programacion { get; set; } = null!;
-        public virtual Usuario? ResponsableNavigation { get; set; } = null!;
+        public virtual Usuarios? ResponsableNavigation { get; set; } = null!;
     }
 }

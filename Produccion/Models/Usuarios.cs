@@ -1,30 +1,32 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Producciones.Models
 {
-    public partial class Usuario : IdentityUser
+    public class Usuarios : IdentityUser
     {
-        public Usuario()
+        public Usuarios()
         {
             Produccions = new HashSet<Produccion>();
             Programacions = new HashSet<Programacion>();
         }
-
-        //public int IdUser { get; set; }
+                    
         [DisplayName("Nombre")]
-        public string Nombre { get; set; } = null!;
+        public string? Nombre { get; set; }
+        public string? Apellido { get; set; }
+            
         [DisplayName("Sector")]
-        public int SectorId { get; set; }
+        public int? SectorId { get; set; } = 1;
         [DisplayName("Categoría")]
-        public int CategoriaId { get; set; }
+        public int? CategoriaId { get; set; } = 1;
+        [DisplayName("Autorizado")]
+        public bool? Autorizado { get; set; } = false;
 
-        public virtual Categoria Categoria { get; set; } = null!;
-        public virtual Sectores Sector { get; set; } = null!;
+        public virtual Categoria? Categoria { get; set; }
+        public virtual Sectores? Sector { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; }
         public virtual ICollection<Programacion> Programacions { get; set; }
+
     }
 }

@@ -6,9 +6,9 @@ namespace Producciones.Controllers
 {
     public class AdminController : Controller
     {
-        private UserManager<Usuario> userManager;
-        private IPasswordHasher<Usuario> passwordHasher;
-        public AdminController(UserManager<Usuario> _userManager, IPasswordHasher<Usuario> passwordHash)
+        private UserManager<Usuarios> userManager;
+        private IPasswordHasher<Usuarios> passwordHasher;
+        public AdminController(UserManager<Usuarios> _userManager, IPasswordHasher<Usuarios> passwordHash)
         {
             userManager = _userManager;
             passwordHasher = passwordHash;
@@ -18,17 +18,18 @@ namespace Producciones.Controllers
             return View(userManager.Users);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(Usuarios user)
         {
             if (ModelState.IsValid)
             {
-                Usuario appUser = new Usuario
+                Usuarios appUser = new Usuarios
                 {
-                    UserName = user.Name,
-                    Email = user.Email
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Categoria = user.Categoria,
+                    Sector = user.Sector,
                 };
-
-                IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+                IdentityResult result = await userManager.CreateAsync(appUser, user.PasswordHash);
 
                 if (result.Succeeded)
                     return RedirectToAction("Index");
@@ -42,7 +43,7 @@ namespace Producciones.Controllers
         }
         public async Task<IActionResult> Update(string id)
         {
-            Usuario user = await userManager.FindByIdAsync(id);
+            Usuarios user = await userManager.FindByIdAsync(id);
             if (user != null)
                 return View(user);
             else
@@ -51,7 +52,7 @@ namespace Producciones.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(string id, string email, string password)
         {
-            Usuario user = await userManager.FindByIdAsync(id);
+            Usuarios user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 if (!string.IsNullOrEmpty(email))
@@ -86,7 +87,7 @@ namespace Producciones.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            Usuario user = await userManager.FindByIdAsync(id);
+            Usuarios user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 IdentityResult result = await

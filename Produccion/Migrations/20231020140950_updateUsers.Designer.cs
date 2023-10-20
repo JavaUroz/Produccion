@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Producciones.Data;
 
@@ -11,9 +12,10 @@ using Producciones.Data;
 namespace Producciones.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231020140950_updateUsers")]
+    partial class updateUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +322,7 @@ namespace Producciones.Migrations
                     b.Property<bool?>("Autorizado")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("CategoriaId")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -357,7 +359,7 @@ namespace Producciones.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SectorId")
+                    b.Property<int>("SectorId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -449,11 +451,14 @@ namespace Producciones.Migrations
                     b.HasOne("Producciones.Models.Categoria", "Categoria")
                         .WithMany("Usuarios")
                         .HasForeignKey("CategoriaId")
+                        .IsRequired()
                         .HasConstraintName("FK__Usuarios__IdCate__4AB81AF0");
 
                     b.HasOne("Producciones.Models.Sectores", "Sector")
                         .WithMany("Usuarios")
                         .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK_Usuarios_Sectores");
 
                     b.Navigation("Categoria");
