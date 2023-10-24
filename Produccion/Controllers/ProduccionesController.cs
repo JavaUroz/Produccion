@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Producciones.Models;
 using Producciones.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Producciones.Controllers
 {
+    [Authorize]
     public class ProduccionesController : Controller
     {
         private readonly ApplicationDbContext _context;

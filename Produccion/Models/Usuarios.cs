@@ -14,6 +14,7 @@ namespace Producciones.Models
                     
         [DisplayName("Nombre")]
         public string? Nombre { get; set; }
+        [DisplayName("Apellido")]
         public string? Apellido { get; set; }
             
         [DisplayName("Sector")]
@@ -21,8 +22,9 @@ namespace Producciones.Models
         [DisplayName("Categoría")]
         public int? CategoriaId { get; set; } = 1;
         [DisplayName("Autorizado")]
-        public bool? Autorizado { get; set; } = false;
-
+        public bool Autorizado { get; set; } = false;
+        [DisplayName("Autorizado")]
+      
         public virtual Categoria? Categoria { get; set; }
         public virtual Sectores? Sector { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Producciones.Controllers
 {
+    [Authorize(Roles = "Super Admin, Admin") ]
     public class HomeController : Controller
     {
         private UserManager<Usuarios> userManager;
@@ -18,7 +19,7 @@ namespace Producciones.Controllers
         {
             Usuarios user = await
             userManager.GetUserAsync(HttpContext.User);
-            string message = "Hello " + user.UserName;
+            string message = "Bienvenido " + user.UserName;
             return View((object)message);
         }
     }

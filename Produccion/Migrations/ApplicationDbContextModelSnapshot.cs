@@ -317,7 +317,7 @@ namespace Producciones.Migrations
                     b.Property<string>("Apellido")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Autorizado")
+                    b.Property<bool>("Autorizado")
                         .HasColumnType("bit");
 
                     b.Property<int?>("CategoriaId")
