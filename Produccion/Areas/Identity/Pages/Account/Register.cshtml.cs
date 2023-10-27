@@ -40,7 +40,6 @@ namespace Producciones.Areas.Identity.Pages.Account
         {
             _userManager = userManager;
             _userStore = userStore;
-            _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -169,13 +168,13 @@ namespace Producciones.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<Usuarios> GetEmailStore()
+        private IUserEmailStore<UserRoles> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<Usuarios>)_userStore;
+            return (IUserEmailStore<UserRoles>)_userStore;
         }
     }
 }

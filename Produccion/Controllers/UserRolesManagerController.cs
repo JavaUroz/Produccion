@@ -15,7 +15,7 @@ public class UserRolesManagerController : Controller
     }
     public async Task<IActionResult> Index()
     {
-        var users = await userManager.Users.ToListAsync();
+        var users = await userManager.Users.ToListAsync();        
         var userRoles = new List<UserRoles>();
         foreach (Usuarios user in users)
         {

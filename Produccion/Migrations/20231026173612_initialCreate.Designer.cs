@@ -12,8 +12,8 @@ using Producciones.Data;
 namespace Producciones.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231024172632_v3")]
-    partial class v3
+    [Migration("20231026173612_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

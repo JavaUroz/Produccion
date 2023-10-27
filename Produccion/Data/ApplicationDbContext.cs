@@ -8,7 +8,7 @@ using Producciones.Models;
 
 namespace Producciones.Data
 {
-    public partial class ApplicationDbContext : IdentityDbContext <Usuarios>
+    public partial class ApplicationDbContext : IdentityDbContext <Usuarios> 
     {
         public ApplicationDbContext()
         {
@@ -27,14 +27,6 @@ namespace Producciones.Data
         public virtual DbSet<Programacion> Programacions { get; set; } = null!;
         public virtual DbSet<Sectores> Sectores { get; set; } = null!;
         public virtual DbSet<Usuarios> Usuarios { get; set; } = null!;
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Server=JAVIER-UROZ\\SQLEXPRESS;Database=OrdenProduccion;Trusted_Connection=True;Encrypt=False");
-        //    }
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
