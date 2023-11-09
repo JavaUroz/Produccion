@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Producciones.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Producciones.Models;
 
+namespace Producciones.Controllers
+{
 public class UserRolesManagerController : Controller
 {
     private readonly UserManager<Usuarios> userManager;
@@ -101,4 +104,5 @@ public class UserRolesManagerController : Controller
         }
         return RedirectToAction("Index");
     }
+}
 }

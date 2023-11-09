@@ -8,23 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using Producciones.Models;
 using Producciones.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Producciones.Controllers
 {
     [Authorize]
     public class ProduccionesController : Controller
     {
+        private readonly UserManager<Usuarios> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ProduccionesController(ApplicationDbContext context)
+        public ProduccionesController(ApplicationDbContext context, UserManager<Usuarios> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Producciones
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Produccions.Include(p => p.Programacion).Include(p => p.ResponsableNavigation);
+            var applicationDbContext = _context.Produccions.Include(p => p.Programacion);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +43,6 @@ namespace Producciones.Controllers
 
             var produccion = await _context.Produccions
                 .Include(p => p.Programacion)
-                .Include(p => p.ResponsableNavigation)
                 .FirstOrDefaultAsync(m => m.IdProduccion == id);
             if (produccion == null)
             {
@@ -52,7 +56,7 @@ namespace Producciones.Controllers
         public IActionResult Create()
         {
             ViewData["ProgramacionId"] = new SelectList(_context.Programacions, "IdProgramacion", "Supervisor");
-            ViewData["Responsable"] = new SelectList(_context.Usuarios, "Id", "Id");
+            ViewData["Responsable"] = new SelectList(_userManager.Users, "Id", "Apellido");
             return View();
         }
 
@@ -63,6 +67,7 @@ namespace Producciones.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdProduccion,ProgramacionId,CantidadProducida,Inicio,Fin,Responsable,Foto")] Produccion produccion)
         {
+            var roles = await _roleManager.Roles.ToListAsync();
             if (ModelState.IsValid)
             {
                 _context.Add(produccion);
@@ -70,7 +75,7 @@ namespace Producciones.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProgramacionId"] = new SelectList(_context.Programacions, "IdProgramacion", "Supervisor", produccion.ProgramacionId);
-            ViewData["Responsable"] = new SelectList(_context.Usuarios, "Id", "Id", produccion.Responsable);
+            ViewData["Responsable"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Responsable o User (No Supervisor o admin)
             return View(produccion);
         }
 
@@ -88,7 +93,7 @@ namespace Producciones.Controllers
                 return NotFound();
             }
             ViewData["ProgramacionId"] = new SelectList(_context.Programacions, "IdProgramacion", "Supervisor", produccion.ProgramacionId);
-            ViewData["Responsable"] = new SelectList(_context.Usuarios, "Id", "Id", produccion.Responsable);
+            ViewData["Responsable"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Responsable o User (No Supervisor o admin)
             return View(produccion);
         }
 
@@ -125,7 +130,7 @@ namespace Producciones.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProgramacionId"] = new SelectList(_context.Programacions, "IdProgramacion", "Supervisor", produccion.ProgramacionId);
-            ViewData["Responsable"] = new SelectList(_context.Usuarios, "Id", "Id", produccion.Responsable);
+            ViewData["Responsable"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Responsable o User (No Supervisor o admin)
             return View(produccion);
         }
 
@@ -139,7 +144,6 @@ namespace Producciones.Controllers
 
             var produccion = await _context.Produccions
                 .Include(p => p.Programacion)
-                .Include(p => p.ResponsableNavigation)
                 .FirstOrDefaultAsync(m => m.IdProduccion == id);
             if (produccion == null)
             {

@@ -20,12 +20,13 @@ namespace Producciones.Models
         [DisplayName("Fin")]
         public DateTime? Fin { get; set; }
         [Required]
-        [DisplayName("Responsable")]
-        public string? Responsable { get; set; }
         [DisplayName("Foto")]
         public byte[]? Foto { get; set; }
+        [Required]
+        [DisplayName("Resposable")]
+        public string Responsable {  get; set; }
 
+        public virtual Usuarios? ResposableNavigation { get; set; } = null!;
         public virtual Programacion? Programacion { get; set; } = null!;
-        public virtual Usuarios? ResponsableNavigation { get; set; } = null!;
     }
 }

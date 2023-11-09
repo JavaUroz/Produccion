@@ -7,23 +7,14 @@ namespace Producciones.Models
 {
     public partial class Articulo
     {
-        public Articulo()
-        {
-            Programacions = new HashSet<Programacion>();
-        }
         [Key]
-        public int IdArticulo { get; set; }
-        [Required]
         [DisplayName("Código")]
-        public int Codigo { get; set; }
-        [Required]
-        [DisplayName("Artículo")]
-        public string Nombre { get; set; } = null!;
-        [Required]
-        [DisplayName("Sector")]
-        public int SectorId { get; set; }
-
-        public virtual Sectores Sector { get; set; } = null!;
-        public virtual ICollection<Programacion> Programacions { get; set; }
+        public string art_CodGen { get; set; } = null!;        
+        [DisplayName("Descripción")]
+        public string art_DescGen { get; set; } = null!;
+        [DisplayName("Unidad de medida")]
+        public string artcla_Cod {  get; set; } = null!;
+        [DisplayName("Tipo")] // id del tipo sea articulo o proceso
+        public string art_Tipo { get; set; } = null!;
     }
 }

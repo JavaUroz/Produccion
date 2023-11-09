@@ -2,7 +2,8 @@
 {
     public class UserAndRolesViewModel
     {
-        public List<UserRoles> Users { get; set; }
-        public List<ManagerUserRoles> Roles { get; set; }
+        public List<Usuarios> Usuarios { get; set; } = null!;
+        public List<ManagerUserRoles> Roles { get; set; } = null!;
+        public List<Sectores> Sectores { get; set; } = null!;
     }
 }

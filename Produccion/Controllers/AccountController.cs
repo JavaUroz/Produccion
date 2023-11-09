@@ -38,7 +38,7 @@
 //                    = await signInManager.PasswordSignInAsync(appUser, login.Password,
 //                    false, false);
 //                    if (result.Succeeded)
-//                        return Redirect(login.ReturnUrl ?? "/");                    
+//                        return Redirect(login.ReturnUrl ?? "/");
 //                }
 //                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
 //            }

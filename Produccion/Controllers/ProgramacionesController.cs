@@ -8,24 +8,45 @@ using Microsoft.EntityFrameworkCore;
 using Producciones.Models;
 using Producciones.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Producciones.Controllers
 {
     [Authorize()]
     public class ProgramacionesController : Controller
     {
+        private readonly UserManager<Usuarios> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly SecondaryDbContext _secondaryContext;
 
-        public ProgramacionesController(ApplicationDbContext context)
+        public ProgramacionesController(ApplicationDbContext context, UserManager<Usuarios> userManager, RoleManager<IdentityRole> roleManager, SecondaryDbContext secondaryContext)
         {
             _context = context;
+            _secondaryContext = secondaryContext;
+            _userManager = userManager;
+            _roleManager = roleManager;            
         }
 
         // GET: Programaciones
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Programacions.Include(p => p.Articulo).Include(p => p.Estado).Include(p => p.Proceso).Include(p => p.SupervisorNavigation);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = await _context.Programacions
+                //.Include(p => p.Articulo)
+                .Include(p => p.Estado)
+                //.Include(p => p.Proceso)
+                .Include(p => p.SupervisorNavigation)
+                .ToListAsync();
+
+            var productos = _secondaryContext.Articulos
+                .Where(a => a.artcla_Cod != "3")
+                .ToListAsync();
+
+            var procesos = _secondaryContext.Articulos
+                .Where(b => b.artcla_Cod == "3")
+                .ToListAsync();
+
+            return View(applicationDbContext);
         }
 
         // GET: Programaciones/Details/5
@@ -37,9 +58,9 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                .Include(p => p.Articulo)
+                //.Include(p => p.Articulo)
                 .Include(p => p.Estado)
-                .Include(p => p.Proceso)
+                //.Include(p => p.Proceso)
                 .Include(p => p.SupervisorNavigation)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
@@ -53,10 +74,10 @@ namespace Producciones.Controllers
         // GET: Programaciones/Create
         public IActionResult Create()
         {
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "Nombre");
+            ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen");
             ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre");
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre");
-            ViewData["Supervisor"] = new SelectList(_context.Usuarios, "Id", "Id");
+            ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen");
+            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View();
         }
 
@@ -73,10 +94,10 @@ namespace Producciones.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "Nombre", programacion.ArticuloId);
+            ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_context.Usuarios, "Id", "Id", programacion.Supervisor);
+            ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
+            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
         }
 
@@ -93,10 +114,10 @@ namespace Producciones.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "Nombre", programacion.ArticuloId);
+            ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_context.Usuarios, "Id", "Id", programacion.Supervisor);
+            ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
+            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
         }
 
@@ -132,10 +153,10 @@ namespace Producciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "Nombre", programacion.ArticuloId);
+            ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
             ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_context.Usuarios, "Id", "Id", programacion.Supervisor);
+            ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
+            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
         }
 
@@ -148,9 +169,9 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                .Include(p => p.Articulo)
+                //.Include(p => p.Articulo)
                 .Include(p => p.Estado)
-                .Include(p => p.Proceso)
+                //.Include(p => p.Proceso)
                 .Include(p => p.SupervisorNavigation)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
