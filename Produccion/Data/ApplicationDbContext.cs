@@ -18,10 +18,8 @@ namespace Producciones.Data
             : base(options)
         {
         }
-        public virtual DbSet<Estado> Estados { get; set; } = null!;
         public virtual DbSet<Produccion> Produccions { get; set; } = null!;
-        public virtual DbSet<Programacion> Programacions { get; set; } = null!;
-        public virtual DbSet<Sectores> Sectores { get; set; } = null!;
-        
+        public virtual DbSet<Programacion> Programacions { get; set; } = null!;   
+
     }
 }

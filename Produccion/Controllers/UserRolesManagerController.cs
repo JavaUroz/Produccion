@@ -44,7 +44,7 @@ public class UserRolesManagerController : Controller
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                ViewBag.ErrorMessage = $"User with Id = {userId} cannot be found";
+                ViewBag.ErrorMessage = $"Usuario con Id = {userId} no pudo ser encontrado.";
                 return View("NotFound");
             }
             ViewBag.UserName = user.UserName;
@@ -92,14 +92,14 @@ public class UserRolesManagerController : Controller
         var result = await userManager.RemoveFromRolesAsync(user, roles);
         if (!result.Succeeded)
         {
-            ModelState.AddModelError("", "Cannot remove user existing roles");
+            ModelState.AddModelError("", "No se pueden eliminar los roles existentes del usuario");
             return View(model);
         }
         result = await userManager.AddToRolesAsync(user, model.Where(x =>
         x.Selected).Select(y => y.RoleName));
         if (!result.Succeeded)
         {
-            ModelState.AddModelError("", "Cannot add selected roles to user");
+            ModelState.AddModelError("", "No se pueden añadir los roles seleccionados al usuario");
             return View(model);
         }
         return RedirectToAction("Index");

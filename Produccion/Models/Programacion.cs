@@ -23,12 +23,10 @@ namespace Producciones.Models
         public double CantidadProgramada { get; set; }
         [Required]
         [DisplayName("Estado")]
-        public int EstadoId { get; set; }
+        public string? Estado { get; set; } // Pendiente, En Proceso, Finalizado
         [Required]
         [DisplayName("Supervisor")]
         public string? Supervisor { get; set; }
-
-        public virtual Estado? Estado { get; set; } = null!;
         public virtual Usuarios? SupervisorNavigation { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; } = new List<Produccion>();
     }

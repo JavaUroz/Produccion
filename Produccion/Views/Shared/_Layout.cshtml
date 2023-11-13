@@ -22,23 +22,22 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-content-center">
                     <ul class="navbar-nav flex-grow-1">                       
-                        <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center">
                             <a class="dropdown-item btn-danger" asp-area="" asp-controller="Producciones" asp-action="Index">Producción</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item d-flex align-items-center">
                             <a class="dropdown-item" asp-area="" asp-controller="Programaciones" asp-action="Index">Programación</a>
                         </li>                                  
 
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown d-flex align-items-center">
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Tablas
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" asp-area="" asp-controller="Articulos" asp-action="Productos">Artículos</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Articulos" asp-action="Procesos">Procesos</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Estados" asp-action="Index">Estados de procesos</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Usuarios</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Sectores" asp-action="Index">Sectores</a>
                             </div>

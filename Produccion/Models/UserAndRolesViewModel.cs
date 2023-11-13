@@ -4,6 +4,5 @@
     {
         public List<Usuarios> Usuarios { get; set; } = null!;
         public List<ManagerUserRoles> Roles { get; set; } = null!;
-        public List<Sectores> Sectores { get; set; } = null!;
     }
 }

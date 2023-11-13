@@ -12,8 +12,8 @@ using Producciones.Data;
 namespace Producciones.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231109165923_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231113144131_InicialCreate")]
+    partial class InicialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,50 +161,6 @@ namespace Producciones.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Producciones.Models.Articulo", b =>
-                {
-                    b.Property<string>("art_CodGen")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("SectoresIdSector")
-                        .HasColumnType("int");
-
-                    b.Property<string>("art_DescGen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("art_Tipo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("artcla_Cod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("art_CodGen");
-
-                    b.HasIndex("SectoresIdSector");
-
-                    b.ToTable("Articulo");
-                });
-
-            modelBuilder.Entity("Producciones.Models.Estado", b =>
-                {
-                    b.Property<int>("IdEstado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstado"), 1L, 1);
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdEstado");
-
-                    b.ToTable("Estados");
-                });
-
             modelBuilder.Entity("Producciones.Models.Produccion", b =>
                 {
                     b.Property<int>("IdProduccion")
@@ -259,8 +215,9 @@ namespace Producciones.Migrations
                     b.Property<double>("CantidadProgramada")
                         .HasColumnType("float");
 
-                    b.Property<int>("EstadoId")
-                        .HasColumnType("int");
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrdenProduccion")
                         .HasColumnType("int");
@@ -277,28 +234,9 @@ namespace Producciones.Migrations
 
                     b.HasKey("IdProgramacion");
 
-                    b.HasIndex("EstadoId");
-
                     b.HasIndex("SupervisorNavigationId");
 
                     b.ToTable("Programacions");
-                });
-
-            modelBuilder.Entity("Producciones.Models.Sectores", b =>
-                {
-                    b.Property<int>("IdSector")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSector"), 1L, 1);
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdSector");
-
-                    b.ToTable("Sectores");
                 });
 
             modelBuilder.Entity("Producciones.Models.Usuarios", b =>
@@ -349,8 +287,8 @@ namespace Producciones.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("SectoresIdSector")
-                        .HasColumnType("int");
+                    b.Property<string>("Sector")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -371,8 +309,6 @@ namespace Producciones.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("SectoresIdSector");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -428,13 +364,6 @@ namespace Producciones.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Producciones.Models.Articulo", b =>
-                {
-                    b.HasOne("Producciones.Models.Sectores", null)
-                        .WithMany("Articulos")
-                        .HasForeignKey("SectoresIdSector");
-                });
-
             modelBuilder.Entity("Producciones.Models.Produccion", b =>
                 {
                     b.HasOne("Producciones.Models.Programacion", "Programacion")
@@ -454,43 +383,16 @@ namespace Producciones.Migrations
 
             modelBuilder.Entity("Producciones.Models.Programacion", b =>
                 {
-                    b.HasOne("Producciones.Models.Estado", "Estado")
-                        .WithMany("Programacions")
-                        .HasForeignKey("EstadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Producciones.Models.Usuarios", "SupervisorNavigation")
                         .WithMany("Programacions")
                         .HasForeignKey("SupervisorNavigationId");
 
-                    b.Navigation("Estado");
-
                     b.Navigation("SupervisorNavigation");
-                });
-
-            modelBuilder.Entity("Producciones.Models.Usuarios", b =>
-                {
-                    b.HasOne("Producciones.Models.Sectores", null)
-                        .WithMany("Usuarios")
-                        .HasForeignKey("SectoresIdSector");
-                });
-
-            modelBuilder.Entity("Producciones.Models.Estado", b =>
-                {
-                    b.Navigation("Programacions");
                 });
 
             modelBuilder.Entity("Producciones.Models.Programacion", b =>
                 {
                     b.Navigation("Produccions");
-                });
-
-            modelBuilder.Entity("Producciones.Models.Sectores", b =>
-                {
-                    b.Navigation("Articulos");
-
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("Producciones.Models.Usuarios", b =>

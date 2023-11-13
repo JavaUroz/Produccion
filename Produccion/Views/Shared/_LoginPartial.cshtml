@@ -6,7 +6,9 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="UserRolesManager" asp-action="Index" title="Manage">Roles Manager</a>
+        <a class="nav-link text-dark" asp-controller="UserRolesManager" asp-action="Index" title="Manage">Roles Manager</a>
+    </li>
+    <li class="nav-item">            
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hola @User.Identity?.Name!</a>        
     </li>
     <li class="nav-item">
@@ -17,9 +19,10 @@
 }
 else
 {
-    @* <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="Account/register">Register</a>
-    </li> *@
+    <li class="nav-item">
+        @* <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrarse</a> *@
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/register">Registrarse</a>
+    </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>            
     </li>

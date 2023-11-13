@@ -75,7 +75,12 @@ namespace Producciones.Controllers
         public IActionResult Create()
         {
             ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen");
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre");
+            ViewData["Estado"] = new SelectList(new[]
+            {
+                new { Value = "En proceso", Text = "En proceso" },
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Finalizado", Text = "Finalizado" }
+            }, "Value", "Text");
             ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen");
             ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View();
@@ -95,7 +100,12 @@ namespace Producciones.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
+            ViewData["Estado"] = new SelectList(new[]
+            {
+                new { Value = "En proceso", Text = "En proceso" },
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Finalizado", Text = "Finalizado" }
+            }, "Value", "Text");
             ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
             ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
@@ -115,7 +125,12 @@ namespace Producciones.Controllers
                 return NotFound();
             }
             ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
+            ViewData["Estado"] = new SelectList(new[]
+            {
+                new { Value = "En proceso", Text = "En proceso" },
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Finalizado", Text = "Finalizado" }
+            }, "Value", "Text");
             ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
             ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
@@ -154,7 +169,12 @@ namespace Producciones.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ArticuloId"] = new SelectList(_secondaryContext.Articulos.Where(a => a.artcla_Cod != "3"), "art_CodGen", "art_DescGen", programacion.ArticuloId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "IdEstado", "Nombre", programacion.EstadoId);
+            ViewData["Estado"] = new SelectList(new[]
+            {
+                new { Value = "En proceso", Text = "En proceso" },
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Finalizado", Text = "Finalizado" }
+            }, "Value", "Text");
             ViewData["ProcesoId"] = new SelectList(_secondaryContext.Articulos.Where(b => b.artcla_Cod == "3"), "art_CodGen", "art_DescGen", programacion.ProcesoId);
             ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
