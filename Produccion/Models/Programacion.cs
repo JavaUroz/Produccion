@@ -27,6 +27,8 @@ namespace Producciones.Models
         [Required]
         [DisplayName("Supervisor")]
         public string? Supervisor { get; set; }
+        public virtual Articulo? Articulo { get; set; }
+        public virtual Proceso? Proceso { get; set; }
         public virtual Usuarios? SupervisorNavigation { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; } = new List<Produccion>();
     }

@@ -1,0 +1,23 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmación de registro";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+<p>
+    Esta aplicación no tiene actualmente un remitente de correo electrónico real registrado, consulte <a href="https://aka.ms/aspaccountconf">estos documentos</a> para saber cómo configurar un remitente de correo electrónico real.
+    Normalmente se enviaría por correo electrónico: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Haga clic aquí para confirmar su cuenta</a>
+</p>
+    }
+    else
+    {
+<p>
+    Compruebe su correo electrónico para confirmar su cuenta.
+</p>
+    }
+}
+

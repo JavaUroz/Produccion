@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Producciones.Data;
 
@@ -11,9 +12,10 @@ using Producciones.Data;
 namespace Producciones.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231114161444_ArticulosDBv2")]
+    partial class ArticulosDBv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,8 +163,15 @@ namespace Producciones.Migrations
 
             modelBuilder.Entity("Producciones.Models.Articulo", b =>
                 {
+                    b.Property<int>("IdArticulo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdArticulo"), 1L, 1);
+
                     b.Property<string>("art_CodGen")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("art_DescGen")
                         .IsRequired()
@@ -172,7 +181,7 @@ namespace Producciones.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("art_CodGen");
+                    b.HasKey("IdArticulo");
 
                     b.ToTable("Articulos");
                 });
@@ -245,9 +254,6 @@ namespace Producciones.Migrations
                     b.Property<int>("ArticuloId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Articuloart_CodGen")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<double>("CantidadProgramada")
                         .HasColumnType("float");
 
@@ -270,7 +276,7 @@ namespace Producciones.Migrations
 
                     b.HasKey("IdProgramacion");
 
-                    b.HasIndex("Articuloart_CodGen");
+                    b.HasIndex("ArticuloId");
 
                     b.HasIndex("ProcesoId");
 
@@ -425,7 +431,9 @@ namespace Producciones.Migrations
                 {
                     b.HasOne("Producciones.Models.Articulo", "Articulo")
                         .WithMany()
-                        .HasForeignKey("Articuloart_CodGen");
+                        .HasForeignKey("ArticuloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Producciones.Models.Proceso", "Proceso")
                         .WithMany("Programacions")

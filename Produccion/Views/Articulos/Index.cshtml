@@ -11,6 +11,11 @@
 @* <p>
     <a asp-action="Create">Create New</a>
 </p> *@
+
+<form asp-controller="Articulos" asp-action="CopyData" method="post">
+    <button type="submit" class="btn btn-primary mt-2 mb-5" title="Obtener artículos actualizados de Bejerman">Actualizar</button>
+</form>
+
 <table id="table" class="table">
     <thead>
         <tr>

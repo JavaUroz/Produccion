@@ -17,6 +17,6 @@ namespace Producciones.Data
             : base(options) 
         {
         }
-        public DbSet<Articulo> Articulos { get; set; }
+        public DbSet<Articulo> Articulos { get; set; } = null!;
     }
 }

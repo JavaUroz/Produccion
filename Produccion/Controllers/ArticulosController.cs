@@ -14,166 +14,59 @@ namespace Producciones.Controllers
     [Authorize]
     public class ArticulosController : Controller
     {
-        private readonly SecondaryDbContext _context;
+        private readonly SecondaryDbContext _secondaryContext;
+        private readonly ApplicationDbContext _context;
 
-        public ArticulosController(SecondaryDbContext context)
+        public ArticulosController(SecondaryDbContext secondaryContext, ApplicationDbContext context)
         {
+            _secondaryContext = secondaryContext;
             _context = context;
         }
 
         // GET: Articulos
-        public async Task<IActionResult> Productos()
+        public async Task<IActionResult> Index()
         {
-            var productos = await _context.Articulos.Where(a => a.art_Tipo != "3")
+            var productos = await _context.Articulos
+                //.Where(a => a.art_Tipo != "3")
                 .ToListAsync();
 
             return View(productos);
         }
-        public async Task<IActionResult> Procesos()
+
+        public async Task<IActionResult> CopyData()
         {
-            var procesos = await _context.Articulos.Where(a => a.art_Tipo == "3")
-                 .ToListAsync();
+            // Obtener datos de SecondaryDbContext
+            var datosSecundarios = await _secondaryContext.Articulos.ToListAsync();
 
-            return View(procesos);
+            foreach (var datoSecundario in datosSecundarios)
+            {
+                // Verificar si ya existe en ApplicationDbContext
+                var existente = await _context.Articulos
+                    .FirstOrDefaultAsync(a => a.art_CodGen == datoSecundario.art_CodGen);
+
+                if (existente == null)
+                {
+                    // Si no existe, insertar nuevo Articulo
+                    var nuevoArticulo = new Articulo
+                    {
+                        art_CodGen = datoSecundario.art_CodGen,
+                        art_DescGen = datoSecundario.art_DescGen,
+                        artcla_Cod = datoSecundario.artcla_Cod
+                    };
+
+                    _context.Articulos.Add(nuevoArticulo);
+                }
+                else
+                {
+                    // Si ya existe, actualizar propiedades
+                    existente.art_DescGen = datoSecundario.art_DescGen;
+                    existente.artcla_Cod = datoSecundario.artcla_Cod;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
-
-        //// GET: Articulos/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null || _context.Articulos == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var articulo = await _context.Articulos
-        //        .Include(a => a.Sector)
-        //        .FirstOrDefaultAsync(m => m.IdArticulo == id);
-        //    if (articulo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(articulo);
-        //}
-
-        //// GET: Articulos/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion");
-        //    return View();
-        //}
-
-        //// POST: Articulos/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("IdArticulo,Codigo,Nombre,SectorId")] Articulo articulo)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(articulo);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-        //    return View(articulo);
-        //}
-
-        //// GET: Articulos/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.Articulos == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var articulo = await _context.Articulos.FindAsync(id);
-        //    if (articulo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-        //    return View(articulo);
-        //}
-
-        //// POST: Articulos/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("IdArticulo,Codigo,Nombre,SectorId")] Articulo articulo)
-        //{
-        //    if (id != articulo.IdArticulo)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(articulo);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ArticuloExists(articulo.IdArticulo))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["SectorId"] = new SelectList(_context.Sectores, "IdSector", "Descripcion", articulo.SectorId);
-        //    return View(articulo);
-        //}
-
-        //// GET: Articulos/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.Articulos == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var articulo = await _context.Articulos
-        //        .Include(a => a.Sector)
-        //        .FirstOrDefaultAsync(m => m.IdArticulo == id);
-        //    if (articulo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(articulo);
-        //}
-
-        //// POST: Articulos/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Articulos == null)
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.Articulos'  is null.");
-        //    }
-        //    var articulo = await _context.Articulos.FindAsync(id);
-        //    if (articulo != null)
-        //    {
-        //        _context.Articulos.Remove(articulo);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool ArticuloExists(int id)
-        //{
-        //    return (_context.Articulos?.Any(e => e.IdArticulo == id)).GetValueOrDefault();
-        //}
     }
 }

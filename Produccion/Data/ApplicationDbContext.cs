@@ -18,8 +18,10 @@ namespace Producciones.Data
             : base(options)
         {
         }
+        public virtual DbSet<Articulo> Articulos { get; set; } = null!;
         public virtual DbSet<Produccion> Produccions { get; set; } = null!;
         public virtual DbSet<Programacion> Programacions { get; set; } = null!;   
+        public DbSet<Producciones.Models.Proceso>? Proceso { get; set; }
 
     }
 }
