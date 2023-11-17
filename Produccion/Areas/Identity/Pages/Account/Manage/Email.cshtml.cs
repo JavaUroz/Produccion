@@ -70,7 +70,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "New email")]
+            [Display(Name = "Nuevo correo electrónico")]
             public string NewEmail { get; set; }
         }
 
@@ -163,7 +163,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             await _emailSender.SendEmailAsync(
                 email,
                 "Confirme su correo electrónico",
-                $"Confirme su cuenta  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>haciendo click aquí</a>.");
+                $"Confirme su cuenta  <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>haciendo click acá</a>.");
 
             StatusMessage = "Correo electrónico de verificación enviado. Por favor, compruebe su correo electrónico.";
             return RedirectToPage();

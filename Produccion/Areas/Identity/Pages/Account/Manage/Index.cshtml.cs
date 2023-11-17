@@ -55,7 +55,12 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>            
+            /// </summary>
+            [Display(Name = "Nombre")]
+            public string Nombre { get; set; }
+
+            [Display(Name = "Apellido")]
+            public string Apellido { get; set; }
             [Phone]
             [Display(Name = "Número de teléfono")]
             public string PhoneNumber { get; set; }
@@ -63,6 +68,9 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(Usuarios user)
         {
+            var apellido = user.Apellido;
+            var nombre = user.Nombre;
+
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
@@ -70,6 +78,8 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Nombre = nombre, 
+                Apellido = apellido,
                 PhoneNumber = phoneNumber
             };
         }
@@ -81,7 +91,6 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"No se puede cargar el usuario con ID '{_userManager.GetUserId(User)}'.");
             }
-
             await LoadAsync(user);
             return Page();
         }
@@ -96,7 +105,25 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
+                // No actualices las propiedades aquí, ya que el usuario no se guardará
                 await LoadAsync(user);
+                return Page();
+            }
+
+            // Actualiza las propiedades del usuario
+            user.Nombre = Input.Nombre;
+            user.Apellido = Input.Apellido;
+
+            // Guarda los cambios en la base de datos
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                // Manejar el error, puedes mostrar el error en el ModelState
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
                 return Page();
             }
 
@@ -110,6 +137,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Su perfil ha sido actualizado!";
             return RedirectToPage();

@@ -62,7 +62,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"No se puede cargar el usuario con ID '{_userManager.GetUserId(User)}'.");
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -74,7 +74,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"No se puede cargar el usuario con ID '{_userManager.GetUserId(User)}'.");
             }
 
             RequirePassword = await _userManager.HasPasswordAsync(user);
@@ -82,7 +82,7 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    ModelState.AddModelError(string.Empty, "Contraseña incorrecta.");
                     return Page();
                 }
             }
@@ -91,12 +91,12 @@ namespace Producciones.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+                throw new InvalidOperationException($"Se ha producido un error inesperado al eliminar el usuario.");
             }
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+            _logger.LogInformation("El usuario con ID '{UserId}' se ha borrado a sí mismo.", userId);
 
             return Redirect("~/");
         }
