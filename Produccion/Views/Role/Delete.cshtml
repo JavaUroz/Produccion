@@ -1,0 +1,16 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+
+@{
+    ViewData["Title"] = "Eliminar rol";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>¿Estás seguro que deseas eliminar el rol "@Html.DisplayFor(model => model.Name)"?</h3>
+<div>    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Name" />
+        <input class="btn btn-danger" type="submit" value="Confirmar"/>
+        <a class="btn btn-primary" asp-action="Index">Volver</a>
+    </form>
+</div>

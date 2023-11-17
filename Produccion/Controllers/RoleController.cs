@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 using System.ComponentModel.DataAnnotations;
 
 namespace Producciones.Controllers
@@ -65,19 +66,70 @@ namespace Producciones.Controllers
             }
             return View(rol);
         }
-        [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+
+        public async Task<IActionResult> Delete(string? id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
-            if (role != null)
+            if (id == null || roleManager.Roles == null)
             {
-                IdentityResult result = await roleManager.DeleteAsync(role);
-                if (result.Succeeded)
-                    return RedirectToAction("Index");
+                return NotFound();
             }
-            else
-                ModelState.AddModelError("", "Error en encontrar el rol");
-            return View("Index", roleManager.Roles);
+
+            var rol = await roleManager.Roles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (rol == null)
+            {
+                return NotFound();
+            }
+
+            return View(rol);
         }
+
+        // POST: Procesos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            try
+            {
+                var rol = await roleManager.FindByIdAsync(id);
+
+                if (rol == null)
+                {
+                    return NotFound(); // El rol no se encontró
+                }
+
+                var result = await roleManager.DeleteAsync(rol);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // Manejar errores de eliminación
+                    // Puedes acceder a los errores a través de result.Errors
+                    return Problem("Error al eliminar el rol.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones generales
+                return Problem($"Error inesperado: {ex.Message}");
+            }
+        }
+        //[HttpPost]
+        //public async Task<IActionResult> Delete(string id)
+        //{
+        //    IdentityRole role = await roleManager.FindByIdAsync(id);
+        //    if (role != null)
+        //    {
+        //        IdentityResult result = await roleManager.DeleteAsync(role);
+        //        if (result.Succeeded)
+        //            return RedirectToAction("Index");
+        //    }
+        //    else
+        //        ModelState.AddModelError("", "Error en encontrar el rol");
+        //    return View("Index", roleManager.Roles);
+        //}
     }
 }

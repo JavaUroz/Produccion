@@ -4,27 +4,36 @@ ViewData["Title"] = "Roles";
 }
 <h1>Todos los Roles</h1>
 
-<a asp-action="Create" class="btn btn-secondary">Crear un Rol</a>
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" title="Crear nuevo rol">
+        <img src="~/img/icons/role.svg" width="30" />
+    </a>
+</div>
 
-<table class="table table-sm table-bordered table-bordered">
+<table class="table ">
     <tr>
-        <th>ID</th>
-        <th>Descrpción</th>
-        <th></th>
+        @* <th>ID</th> *@
+        <th>Descripción</th>
         <th></th>
     </tr>
     @foreach (var role in Model)
     {
     <tr>
-        <td>@role.Id</td>
-        <td>@role.Name</td>
-        <td>
-            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@role.Id">Editar</a>
-        </td>
-        <td>
-            <form asp-action="Delete" asp-route-id="@role.Id" method="post">
-                <button type="submit" class="btn btn-sm btn-danger">Borrar</button>
-            </form>
+        @* <td>@role.Id</td> *@
+        <td>@role.Name</td>        
+        <td class ="d-flex justify-content-end">
+            <div class="row">
+                <div class="col">
+                    <a asp-action="Edit" asp-route-id="@role.Id" title="Editar" class="mr-2">
+                        <img src="~/img/icons/editar.svg" width="20"/>
+                    </a>
+                </div>
+                <div class="col">
+                    <a asp-action="Delete" asp-route-id="@role.Id" method="post" title="Eliminar">
+                        <img src="~/img/icons/borrar.svg" width="20" />
+                    </a>
+                </div>                
+            </div>
         </td>
     </tr>
 }

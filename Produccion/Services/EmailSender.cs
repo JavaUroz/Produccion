@@ -12,7 +12,9 @@ public class EmailSender : IEmailSender
     private readonly ILogger _logger; 
     private readonly SmtpSettings _smtpSettings;
 
+#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
     public EmailSender(IOptions<SmtpSettings> smtpSettings, ILogger<EmailSender> logger)
+#pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
     {
         _smtpSettings = smtpSettings.Value;
         _logger = logger;

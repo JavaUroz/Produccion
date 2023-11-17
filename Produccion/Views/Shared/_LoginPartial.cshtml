@@ -5,9 +5,19 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="UserRolesManager" asp-action="Index" title="Manage">Roles Manager</a>
+    <li class="nav-item dropdown d-flex align-items-center">
+        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Users Manager">
+             <img src="~/img/icons/manager.svg" width="25"/>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Usuarios</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
+            <a class="dropdown-item" asp-area="" asp-controller="UserRolesManager" asp-action="Index">RoleManager</a>
+        </div>
     </li>
+    @* <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="UserRolesManager" asp-action="Index" title="Manage">Roles Manager</a>
+    </li> *@
     <li class="nav-item">            
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hola @User.Identity?.Name!</a>        
     </li>

@@ -3,12 +3,10 @@
 @model Programacion
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Cargar programación";
 }
 
-<h1>Create</h1>
-
-<h4>Programacion</h4>
+<h4>Cargar programacion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,8 +22,12 @@
                 <select asp-for="ProcesoId" class ="form-control" asp-items="ViewBag.ProcesoId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ArticuloId" class="control-label"></label>
-                <select asp-for="ArticuloId" class ="form-control" asp-items="ViewBag.ArticuloId"></select>
+                <div class="row">
+                    <label asp-for="Articulo" class="control-label"></label>
+                    <select asp-for="Articulo" class="form-control" asp-items="ViewBag.Articulo" id="selectArticulo"></select>
+                    <small class="form-text text-muted">Buscar artículo por código o nombre.</small>
+                </div>
+                
             </div>
             <div class="form-group">
                 <label asp-for="CantidadProgramada" class="control-label"></label>
@@ -34,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
-                <select asp-for="Estado" class ="form-control" asp-items="ViewBag.EstadoId"></select>
+                <select asp-for="Estado" class ="form-control" asp-items="ViewBag.Estado"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -49,4 +51,24 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Agregar Select2 al select de Articulo
+        $(document).ready(function () {
+            $('#selectArticulo').select2({
+                placeholder: 'Buscar artículo',
+                ajax: {
+                    url: '/Articulo/Buscar', // Ajusta la ruta según tu controlador y acción para buscar artículos
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 3
+            });
+        });
+    </script>
 }

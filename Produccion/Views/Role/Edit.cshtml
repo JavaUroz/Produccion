@@ -1,7 +1,36 @@
 ﻿@model Microsoft.AspNetCore.Identity.IdentityRole
 
-<h1>Editar un Rol</h1>
-<a asp-action="Index" class="btn btn-secondary">Volver</a>
+<h1>Modificar</h1>
+
+<h4>Rol</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-floating mt-1">
+                <input asp-for="Name" class="form-control mt-1" aria-required="true" required />
+                <label asp-for="Name" class="form-label">Nombre de rol</label>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a class="btn btn-danger" asp-action="Index">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@* <a asp-action="Index" class="btn btn-secondary">Volver</a>
 <div asp-validation-summary="All" class="text-danger"></div>
 <form asp-action="Edit" method="post">
     <div class="form-group">
@@ -9,4 +38,4 @@
         <input asp-for="Name" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+</form>*@

@@ -31,9 +31,7 @@ namespace Producciones.Controllers
         {
             var programaciones = await _context.Programacions
                 .Include(p => p.Articulo)
-                .Include(p => p.Estado)
                 .Include(p => p.Proceso)
-                .Include(p => p.SupervisorNavigation)
                 .ToListAsync();
                         
             return View(programaciones);
@@ -48,10 +46,8 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                //.Include(p => p.Articulo)
-                .Include(p => p.Estado)
-                //.Include(p => p.Proceso)
-                .Include(p => p.SupervisorNavigation)
+                .Include(p => p.Articulo)
+                .Include(p => p.Proceso)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
             {
@@ -64,7 +60,13 @@ namespace Producciones.Controllers
         // GET: Programaciones/Create
         public IActionResult Create()
         {
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "art_CodGen", "art_DescGen");
+            ViewData["Articulo"] = new SelectList(_context.Articulos
+                .Select(a => new
+                {
+                    Id = a.art_CodGen,
+                    Nombre = $"{a.art_CodGen} - {a.art_DescGen}"
+                }), "Id", "Nombre");
+
             ViewData["Estado"] = new SelectList(new[]
             {
                 new { Value = "En proceso", Text = "En proceso" },
@@ -81,15 +83,16 @@ namespace Producciones.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProgramacion,OrdenProduccion,ProcesoId,ArticuloId,CantidadProgramada,EstadoId,Supervisor")] Programacion programacion)
+        public async Task<IActionResult> Create([Bind("IdProgramacion,OrdenProduccion,ProcesoId,art_CodGen,CantidadProgramada,EstadoId,Supervisor")] Programacion programacion)
         {
+            programacion.Supervisor = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 _context.Add(programacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.ArticuloId);
+            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.Articulo);
             ViewData["Estado"] = new SelectList(new[]
             {
                 new { Value = "En proceso", Text = "En proceso" },
@@ -114,7 +117,7 @@ namespace Producciones.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.ArticuloId);
+            ViewData["Articulo"] = new SelectList(_context.Articulos, "art_CodGen", "art_DescGen", programacion.Articulo);
             ViewData["Estado"] = new SelectList(new[]
             {
                 new { Value = "En proceso", Text = "En proceso" },
@@ -131,8 +134,10 @@ namespace Producciones.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProgramacion,OrdenProduccion,ProcesoId,ArticuloId,CantidadProgramada,EstadoId,Supervisor")] Programacion programacion)
+        public async Task<IActionResult> Edit(int id, [Bind("IdProgramacion,OrdenProduccion,ProcesoId,art_CodGen,CantidadProgramada,Estado,Supervisor")] Programacion programacion)
         {
+            programacion.Supervisor = _userManager.GetUserId(User);
+
             if (id != programacion.IdProgramacion)
             {
                 return NotFound();
@@ -158,7 +163,7 @@ namespace Producciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.ArticuloId);
+            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.Articulo);
             ViewData["Estado"] = new SelectList(new[]
             {
                 new { Value = "En proceso", Text = "En proceso" },
@@ -179,10 +184,9 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                //.Include(p => p.Articulo)
+                .Include(p => p.Articulo)
                 .Include(p => p.Estado)
-                //.Include(p => p.Proceso)
-                .Include(p => p.SupervisorNavigation)
+                .Include(p => p.Proceso)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
             {

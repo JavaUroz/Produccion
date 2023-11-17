@@ -17,7 +17,7 @@ namespace Producciones.Models
         public int ProcesoId { get; set; }
         [Required]
         [DisplayName("Artículo")]
-        public int ArticuloId { get; set; }
+        public string? art_CodGen { get; set; }
         [Required]
         [DisplayName("Cantidad programada")]
         public double CantidadProgramada { get; set; }
@@ -29,7 +29,6 @@ namespace Producciones.Models
         public string? Supervisor { get; set; }
         public virtual Articulo? Articulo { get; set; }
         public virtual Proceso? Proceso { get; set; }
-        public virtual Usuarios? SupervisorNavigation { get; set; } = null!;
         public virtual ICollection<Produccion> Produccions { get; set; } = new List<Produccion>();
     }
 }

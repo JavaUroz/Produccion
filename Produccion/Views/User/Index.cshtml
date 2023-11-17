@@ -13,9 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
@@ -23,9 +20,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailConfirmed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Sector)
@@ -38,9 +32,6 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
                 <td>
@@ -50,15 +41,10 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                    @Html.DisplayFor(modelItem => item.Sector)
                 </td>
                 <td>
-                    @Html.DisplayNameFor(modelItem => item.Sector)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Modificar</a> @*|
-                    <a asp-action="Details" asp-route-id="@item.IdProduccion">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdProduccion">Delete</a> *@
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Asignar sector a usuario"><img src="~/img/icons/sectores.svg" width="20"/></a>
                 </td>
             </tr>
         }

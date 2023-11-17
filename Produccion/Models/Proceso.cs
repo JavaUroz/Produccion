@@ -9,7 +9,7 @@ namespace Producciones.Models
     {
         [Key]        
         public int IdProceso { get; set; }
-        [DisplayName("Proceso")]
+        [DisplayName("Descripción")]
         public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Programacion> Programacions { get; set; } = new List<Programacion>();

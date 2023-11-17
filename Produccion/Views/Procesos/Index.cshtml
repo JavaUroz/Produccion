@@ -5,11 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Listado de procesos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" title="Crear nuevo proceso">
+        <img src="~/img/icons/agregar.svg" width="25"/>
+    </a>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -25,10 +27,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdProceso">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdProceso">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdProceso">Delete</a>
+            <td class="d-flex justify-content-end">
+                    <div class="row">
+                        <div class="col">
+                            <a asp-action="Edit" asp-route-id="@item.IdProceso" title="Editar" class="mr-2">
+                                <img src="~/img/icons/editar.svg" width="20" />
+                            </a>
+                        </div>                        
+                        <div class="col">
+                            <a asp-action="Delete" asp-route-id="@item.IdProceso" title="Eliminar">
+                                <img src="~/img/icons/borrar.svg" width="20" />
+                            </a>
+                        </div>
+                    </div>
             </td>
         </tr>
 }
