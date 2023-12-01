@@ -1,4 +1,4 @@
-﻿@using Producciones.Models
+﻿@* @using Producciones.Models
 
 @model IEnumerable<Articulo>
 
@@ -8,10 +8,6 @@
 
 <h1>Listado de Artículos</h1>
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-
 <form asp-controller="Articulos" asp-action="CopyData" method="post">
     <button type="submit" class="btn btn-primary mt-2 mb-5" title="Obtener artículos actualizados de Bejerman">Actualizar</button>
 </form>
@@ -20,10 +16,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.art_CodGen)
+                @Html.DisplayNameFor(model => model.ArtCodGen)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.art_DescGen)
+                @Html.DisplayNameFor(model => model.ArtDescGen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArtclaCod)
             </th>
         </tr>
     </thead>
@@ -31,12 +30,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    @Html.DisplayFor(modelItem => item.art_CodGen)
+                @Html.DisplayFor(modelItem => item.ArtCodGen)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.art_DescGen)
+                @Html.DisplayFor(modelItem => item.ArtDescGen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtclaCod)
             </td>
         </tr>
 }
     </tbody>
 </table>
+ *@

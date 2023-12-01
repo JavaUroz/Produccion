@@ -6,69 +6,46 @@
     ViewData["Title"] = "Cargar programación";
 }
 
-<h4>Cargar programacion</h4>
+<h4>Cargar Programación</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OrdenProduccion" class="control-label"></label>
-                <input asp-for="OrdenProduccion" class="form-control" />
-                <span asp-validation-for="OrdenProduccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProcesoId" class="control-label"></label>
-                <select asp-for="ProcesoId" class ="form-control" asp-items="ViewBag.ProcesoId"></select>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <label asp-for="Articulo" class="control-label"></label>
-                    <select asp-for="Articulo" class="form-control" asp-items="ViewBag.Articulo" id="selectArticulo"></select>
-                    <small class="form-text text-muted">Buscar artículo por código o nombre.</small>
+            <div class="form-floating mt-1">
+                <input asp-for="OrdenProduccion" class="form-control mt-1" aria-required="true" required />
+                <label asp-for="OrdenProduccion" class="form-label"></label>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="OrdenProduccion" class="text-danger"></span>
                 </div>
-                
             </div>
-            <div class="form-group">
-                <label asp-for="CantidadProgramada" class="control-label"></label>
-                <input asp-for="CantidadProgramada" class="form-control" />
-                <span asp-validation-for="CantidadProgramada" class="text-danger"></span>
+            <div class="form-floating mt-1">
+                <select asp-for="ProcesoId" class="form-select d-block" asp-items="ViewBag.Proceso">
+                    <option selected></option>
+                </select>
+                <label class="d-block">Seleccione un proceso</label>
             </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <select asp-for="Estado" class ="form-control" asp-items="ViewBag.Estado"></select>
+            <div class="form-group mt-1">
+                <label asp-for="ArticuloCod" class="form-label m-2 md-0" style="font-size:14px; color: grey;">Seleccione un artículo</label>                
+                <select asp-for="ArticuloCod" class="form-select d-block" id="mi-selector" asp-items="ViewBag.Articulo">
+                    <option selected></option>
+                </select>                
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-floating mt-1">
+                <input asp-for="CantidadProgramada" class="form-control mt-1" aria-required="true" required />
+                <label asp-for="CantidadProgramada" class="form-label"></label>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="CantidadProgramada" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mt-1">
+                <input type="submit" value="Cargar" class="btn btn-primary" />
+                <a class="btn btn-danger" asp-action="Index">Volver</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        // Agregar Select2 al select de Articulo
-        $(document).ready(function () {
-            $('#selectArticulo').select2({
-                placeholder: 'Buscar artículo',
-                ajax: {
-                    url: '/Articulo/Buscar', // Ajusta la ruta según tu controlador y acción para buscar artículos
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: function (data) {
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 3
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
 }

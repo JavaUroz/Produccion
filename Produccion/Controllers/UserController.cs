@@ -13,8 +13,8 @@ namespace Producciones.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<Usuarios> _userManager;
-        private readonly ApplicationDbContext _context;
-        public UserController(UserManager<Usuarios> userManager, ApplicationDbContext context)
+        private readonly ProduccionContext _context;
+        public UserController(UserManager<Usuarios> userManager, ProduccionContext context)
         {
             _userManager = userManager;
             _context = context;

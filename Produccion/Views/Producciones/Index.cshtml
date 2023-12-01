@@ -1,4 +1,4 @@
-﻿@using Producciones.Models
+﻿@* @using Producciones.Models
 
 @model IEnumerable<Produccion>
 
@@ -29,9 +29,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Programacion)
             </th>
-            @* <th>
+            <th>
                 @Html.DisplayNameFor(model => model.ResponsableNavigation)
-            </th> *@
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -51,11 +51,11 @@
                 @Html.DisplayFor(modelItem => item.Foto)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Programacion.Supervisor)
+                @Html.DisplayFor(modelItem => item.Programacion.UsuarioId)
             </td>
-           @*  <td>
+           <td>
                 @Html.DisplayFor(modelItem => item.ResponsableNavigation.Id)
-            </td> *@
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdProduccion">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.IdProduccion">Details</a> |
@@ -65,3 +65,4 @@
 }
     </tbody>
 </table>
+ *@

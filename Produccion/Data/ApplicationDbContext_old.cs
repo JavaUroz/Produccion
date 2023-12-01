@@ -1,23 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Producciones.Models;
+﻿//using System;
+//using System.Collections.Generic;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore.Metadata;
+//using Producciones.Models;
 
-namespace Producciones.Data
-{
-    public class SecondaryDbContext : DbContext
-    {
-        public SecondaryDbContext()
-        {
-        }
-        public SecondaryDbContext(DbContextOptions<SecondaryDbContext> options)
-            : base(options)
-        {
-        }
+//namespace Producciones.Data
+//{
+//    public partial class ApplicationDbContext : IdentityDbContext<Usuarios>
+//    {
+//        public ApplicationDbContext()
+//        {
+//        }
+
+//        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+//            : base(options)
+//        {
+//        }
+
         //public virtual DbSet<Articulo> Articulos { get; set; } = null!;
+        //public virtual DbSet<Proceso> Procesos { get; set; } = null!;
+        //public virtual DbSet<Produccion> Produccions { get; set; } = null!;
+        //public virtual DbSet<Programacion> Programacions { get; set; } = null!;
+
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<Articulo>(entity =>
@@ -71,7 +77,21 @@ namespace Producciones.Data
         //        entity.Property(e => e.ArttivCodVta).HasColumnName("arttiv_CodVta");
 
         //        entity.Property(e => e.ArtusuCodigo).HasColumnName("artusu_Codigo");
-        //    });  
+        //    });
+
+            //modelBuilder.Entity<Programacion>()
+            //        .HasOne(p => p.Articulo)
+            //        .WithMany()
+            //        .HasForeignKey(p => p.ArticuloCod)
+            //        .IsRequired();
+            
+
+        //    modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
+
+        //    modelBuilder.Entity<IdentityUserRole<string>>().HasKey(l => new { l.UserId, l.RoleId });
+
+        //    modelBuilder.Entity<IdentityUserToken<string>>().HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
         //}
-    }
-}
+//    }
+//}
+

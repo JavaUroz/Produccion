@@ -10,18 +10,19 @@ using Producciones.Data;
 using Producciones.Models;
 using System;
 using Producciones.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuración de la cadena de conexión para la base de datos principal
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ProduccionContext>(options =>
+    options.UseSqlServer(connectionString, sqlServerOptionsAction => sqlServerOptionsAction.CommandTimeout(300)));
 
 // Configuración de la cadena de conexión para la base de datos secundaria
 var secondaryConnectionString = builder.Configuration.GetConnectionString("SecondaryConnection");
 builder.Services.AddDbContext<SecondaryDbContext>(options =>
-    options.UseSqlServer(secondaryConnectionString));
+    options.UseSqlServer(secondaryConnectionString, sqlServerOptionsAction => sqlServerOptionsAction.CommandTimeout(300)));
 
 // Filtro de excepciones para páginas de desarrollador
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -49,7 +50,7 @@ builder.Services.AddDefaultIdentity<Usuarios>(options =>
     options.SignIn.RequireConfirmedAccount = true;
 })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddEntityFrameworkStores<ProduccionContext>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
 

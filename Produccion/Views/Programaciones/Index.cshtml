@@ -6,11 +6,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Listado de programaciones</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" title="Cargar nueva programación">
+        <img src="~/img/icons/agregar.svg" width="25" />
+    </a>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -18,19 +20,16 @@
                 @Html.DisplayNameFor(model => model.OrdenProduccion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CantidadProgramada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.art_CodGen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Proceso)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Supervisor)
+                @Html.DisplayNameFor(model => model.ArticuloCod)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadProgramada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
             </th>
             <th></th>
         </tr>
@@ -42,21 +41,35 @@
                 @Html.DisplayFor(modelItem => item.OrdenProduccion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CantidadProgramada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Articulo.art_DescGen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Proceso.Nombre)
-            </td>            
+            </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdProgramacion">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdProgramacion">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdProgramacion">Delete</a>
+                @Html.DisplayFor(modelItem => item.ArticuloCodNavigation.ArtDescGen) (@Html.DisplayFor(modelItem => item.ArticuloCod))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadProgramada)
+            </td>                        
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario.Apellido), @Html.DisplayFor(modelItem => item.Usuario.Nombre) (@Html.DisplayFor(modelItem => item.Usuario.Email))
+            </td>
+            <td class="d-flex justify-content-end">
+                <div class="row">
+                    <div class="col">
+                            <a asp-action="Edit" asp-route-id="@item.IdProgramacion" title="Editar" class="mr-2">
+                            <img src="~/img/icons/editar.svg" width="20" />
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a asp-action="Details" asp-route-id="@item.IdProgramacion" title="Detalle">
+                            <img src="~/img/icons/details.svg" width="20" />
+                        </a>
+                    </div>
+                    <div class="col">
+                            <a asp-action="Delete" asp-route-id="@item.IdProgramacion" title="Eliminar">
+                            <img src="~/img/icons/borrar.svg" width="20" />
+                        </a>
+                    </div>
+                </div>
             </td>
         </tr>
 }

@@ -9,31 +9,31 @@ using Producciones.Models;
 using Producciones.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Producciones.Controllers
 {
-    [Authorize()]
     public class ProgramacionesController : Controller
     {
         private readonly UserManager<Usuarios> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ApplicationDbContext _context;
+        private readonly ProduccionContext _context;
 
-        public ProgramacionesController(ApplicationDbContext context, UserManager<Usuarios> userManager, RoleManager<IdentityRole> roleManager, SecondaryDbContext secondaryContext)
+        public ProgramacionesController(ProduccionContext context, UserManager<Usuarios> userManager, RoleManager<IdentityRole> roleManager, SecondaryDbContext secondaryContext)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;            
+            _roleManager = roleManager;
         }
-
         // GET: Programaciones
         public async Task<IActionResult> Index()
         {
             var programaciones = await _context.Programacions
-                .Include(p => p.Articulo)
+                .Include(p => p.ArticuloCodNavigation)
                 .Include(p => p.Proceso)
+                .Include(p => p.Usuario)
                 .ToListAsync();
-                        
+
             return View(programaciones);
         }
 
@@ -46,7 +46,7 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                .Include(p => p.Articulo)
+                .Include(p => p.ArticuloCodNavigation)
                 .Include(p => p.Proceso)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
@@ -56,54 +56,58 @@ namespace Producciones.Controllers
 
             return View(programacion);
         }
-
+        [Authorize(Roles = "Supervisor, Admin")]
         // GET: Programaciones/Create
         public IActionResult Create()
         {
             ViewData["Articulo"] = new SelectList(_context.Articulos
+                .OrderBy(a => a.ArtDescGen) // Ordenar por art_CodDesc = "Descripcion"
                 .Select(a => new
                 {
-                    Id = a.art_CodGen,
-                    Nombre = $"{a.art_CodGen} - {a.art_DescGen}"
+                    Id = a.ArtCodGen,
+                    Nombre = $"{a.ArtDescGen} (Cod. {a.ArtCodGen})"
                 }), "Id", "Nombre");
 
-            ViewData["Estado"] = new SelectList(new[]
-            {
-                new { Value = "En proceso", Text = "En proceso" },
-                new { Value = "Pendiente", Text = "Pendiente" },
-                new { Value = "Finalizado", Text = "Finalizado" }
-            }, "Value", "Text");
-            ViewData["ProcesoId"] = new SelectList(_context.Proceso, "IdProceso", "Nombre");
-            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
+            //ViewData["Estado"] = new SelectList(new[]
+            //{
+            //    new { Value = "En proceso", Text = "En proceso" },
+            //    new { Value = "Pendiente", Text = "Pendiente" },
+            //    new { Value = "Finalizado", Text = "Finalizado" }
+            //}, "Value", "Text");
+            ViewData["Proceso"] = new SelectList(_context.Procesos, "IdProceso", "Nombre");
             return View();
         }
 
         // POST: Programaciones/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Supervisor, Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProgramacion,OrdenProduccion,ProcesoId,art_CodGen,CantidadProgramada,EstadoId,Supervisor")] Programacion programacion)
+        public async Task<IActionResult> Create([Bind("IdProgramacion,OrdenProduccion,ProcesoId,ArticuloCod,CantidadProgramada,Estado,UsuarioId")] Programacion programacion)
         {
-            programacion.Supervisor = _userManager.GetUserId(User);
+            programacion.UsuarioId = _userManager.GetUserId(User);
+            ViewData["Articulo"] = new SelectList(_context.Articulos
+                .OrderBy(a => a.ArtDescGen)
+                .Select(a => new
+                {
+                    Id = a.ArtCodGen,
+                    Nombre = $"{a.ArtDescGen} (Cod. {a.ArtCodGen})"
+                }), "Id", "Nombre", programacion.ArticuloCod);
+
+            ViewData["Proceso"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
+
             if (ModelState.IsValid)
             {
+                programacion.Estado = "Pendiente";
                 _context.Add(programacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.Articulo);
-            ViewData["Estado"] = new SelectList(new[]
-            {
-                new { Value = "En proceso", Text = "En proceso" },
-                new { Value = "Pendiente", Text = "Pendiente" },
-                new { Value = "Finalizado", Text = "Finalizado" }
-            }, "Value", "Text");
-            ViewData["ProcesoId"] = new SelectList(_context.Proceso, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
+
             return View(programacion);
         }
-
+        [Authorize(Roles = "Supervisor, Admin")]
         // GET: Programaciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -117,26 +121,33 @@ namespace Producciones.Controllers
             {
                 return NotFound();
             }
-            ViewData["Articulo"] = new SelectList(_context.Articulos, "art_CodGen", "art_DescGen", programacion.Articulo);
+            programacion.UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["Articulo"] = new SelectList(_context.Articulos
+                 .OrderBy(a => a.ArtDescGen) // Ordenar por art_CodDesc = "Descripcion"
+                 .Select(a => new
+                 {
+                     Id = a.ArtCodGen,
+                     Nombre = $"{a.ArtDescGen} (Cod. {a.ArtCodGen})"
+                 }), "Id", "Nombre", programacion.ArticuloCod);
             ViewData["Estado"] = new SelectList(new[]
             {
-                new { Value = "En proceso", Text = "En proceso" },
-                new { Value = "Pendiente", Text = "Pendiente" },
-                new { Value = "Finalizado", Text = "Finalizado" }
+                new { Value = "Pendiente", Text = "Pendiente" }//,
+                //new { Value = "En proceso", Text = "En proceso" },                
+                //new { Value = "Finalizado", Text = "Finalizado" }
             }, "Value", "Text");
-            ViewData["ProcesoId"] = new SelectList(_context.Proceso, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
+            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
+            //ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
         }
-
+        [Authorize(Roles = "Supervisor, Admin")]
         // POST: Programaciones/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProgramacion,OrdenProduccion,ProcesoId,art_CodGen,CantidadProgramada,Estado,Supervisor")] Programacion programacion)
+        public async Task<IActionResult> Edit(int id, [Bind("IdProgramacion,OrdenProduccion,ProcesoId,ArticuloCod,CantidadProgramada,Estado,Supervisor")] Programacion programacion)
         {
-            programacion.Supervisor = _userManager.GetUserId(User);
+            programacion.UsuarioId = _userManager.GetUserId(User);
 
             if (id != programacion.IdProgramacion)
             {
@@ -163,18 +174,25 @@ namespace Producciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArticuloId"] = new SelectList(_context.Articulos, "IdArticulo", "art_DescGen", programacion.Articulo);
+            programacion.UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["Articulo"] = new SelectList(_context.Articulos
+                 .OrderBy(a => a.ArtDescGen) // Ordenar por art_CodDesc = "Descripcion"
+                 .Select(a => new
+                 {
+                     Id = a.ArtCodGen,
+                     Nombre = $"{a.ArtDescGen} (Cod. {a.ArtCodGen})"
+                 }), "Id", "Nombre", programacion.ArticuloCod);
             ViewData["Estado"] = new SelectList(new[]
             {
                 new { Value = "En proceso", Text = "En proceso" },
                 new { Value = "Pendiente", Text = "Pendiente" },
                 new { Value = "Finalizado", Text = "Finalizado" }
             }, "Value", "Text");
-            ViewData["ProcesoId"] = new SelectList(_context.Proceso, "IdProceso", "Nombre", programacion.ProcesoId);
-            ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
+            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
+            //ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
         }
-
+        [Authorize(Roles = "Supervisor, Admin")]
         // GET: Programaciones/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -184,7 +202,7 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                .Include(p => p.Articulo)
+                .Include(p => p.ArticuloCodNavigation)
                 .Include(p => p.Estado)
                 .Include(p => p.Proceso)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
@@ -195,7 +213,7 @@ namespace Producciones.Controllers
 
             return View(programacion);
         }
-
+        [Authorize(Roles = "Supervisor, Admin")]
         // POST: Programaciones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -210,14 +228,14 @@ namespace Producciones.Controllers
             {
                 _context.Programacions.Remove(programacion);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProgramacionExists(int id)
         {
-          return (_context.Programacions?.Any(e => e.IdProgramacion == id)).GetValueOrDefault();
+            return (_context.Programacions?.Any(e => e.IdProgramacion == id)).GetValueOrDefault();
         }
     }
 }

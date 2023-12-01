@@ -12,9 +12,9 @@ namespace Producciones.Controllers
 {
     public class ProcesosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ProduccionContext _context;
 
-        public ProcesosController(ApplicationDbContext context)
+        public ProcesosController(ProduccionContext context)
         {
             _context = context;
         }
@@ -22,20 +22,20 @@ namespace Producciones.Controllers
         // GET: Procesos
         public async Task<IActionResult> Index()
         {
-              return _context.Proceso != null ? 
-                          View(await _context.Proceso.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Proceso'  is null.");
+            return _context.Procesos != null ?
+                        View(await _context.Procesos.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Proceso'  is null.");
         }
 
         // GET: Procesos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Proceso == null)
+            if (id == null || _context.Procesos == null)
             {
                 return NotFound();
             }
 
-            var proceso = await _context.Proceso
+            var proceso = await _context.Procesos
                 .FirstOrDefaultAsync(m => m.IdProceso == id);
             if (proceso == null)
             {
@@ -70,12 +70,12 @@ namespace Producciones.Controllers
         // GET: Procesos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Proceso == null)
+            if (id == null || _context.Procesos == null)
             {
                 return NotFound();
             }
 
-            var proceso = await _context.Proceso.FindAsync(id);
+            var proceso = await _context.Procesos.FindAsync(id);
             if (proceso == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace Producciones.Controllers
         // GET: Procesos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Proceso == null)
+            if (id == null || _context.Procesos == null)
             {
                 return NotFound();
             }
 
-            var proceso = await _context.Proceso
+            var proceso = await _context.Procesos
                 .FirstOrDefaultAsync(m => m.IdProceso == id);
             if (proceso == null)
             {
@@ -141,23 +141,23 @@ namespace Producciones.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Proceso == null)
+            if (_context.Procesos == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Proceso'  is null.");
             }
-            var proceso = await _context.Proceso.FindAsync(id);
+            var proceso = await _context.Procesos.FindAsync(id);
             if (proceso != null)
             {
-                _context.Proceso.Remove(proceso);
+                _context.Procesos.Remove(proceso);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProcesoExists(int id)
         {
-          return (_context.Proceso?.Any(e => e.IdProceso == id)).GetValueOrDefault();
+            return (_context.Procesos?.Any(e => e.IdProceso == id)).GetValueOrDefault();
         }
     }
 }

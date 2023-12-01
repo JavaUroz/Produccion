@@ -1,4 +1,4 @@
-﻿@using Producciones.Models
+﻿@* @using Producciones.Models
 
 @model Programacion
 
@@ -43,10 +43,10 @@
             @Html.DisplayFor(model => model.Proceso.Nombre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Supervisor)
+            @Html.DisplayNameFor(model => model.UsuarioId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Supervisor)
+            @Html.DisplayFor(model => model.UsuarioId)
         </dd>
     </dl>
 </div>
@@ -54,3 +54,4 @@
     <a asp-action="Edit" asp-route-id="@Model?.IdProgramacion">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+ *@

@@ -1,4 +1,4 @@
-﻿@using Producciones.Models
+﻿@* @using Producciones.Models
 
 @model Produccion
 
@@ -41,14 +41,8 @@
             @Html.DisplayNameFor(model => model.Programacion)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Programacion.Supervisor)
+            @Html.DisplayFor(model => model.Programacion.Usuario.Apellido), @Html.DisplayFor(model => model.Programacion.Usuario.Nombre)
         </dd>
-        @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResponsableNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResponsableNavigation.Id)
-        </dd> *@
     </dl>
     
     <form asp-action="Delete">
@@ -57,3 +51,4 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+ *@
