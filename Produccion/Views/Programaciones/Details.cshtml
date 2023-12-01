@@ -1,15 +1,15 @@
-﻿@* @using Producciones.Models
+﻿@using Producciones.Models
 
 @model Programacion
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle de Orden de Producción";
 }
 
-<h1>Details</h1>
+<h1>Detalle</h1>
 
 <div>
-    <h4>Programacion</h4>
+    <h4>Programacion de OP</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -24,11 +24,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CantidadProgramada)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Articulo)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ArticuloCodNavigation)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Articulo)
+        <dd class="col-sm-10">
+            @{
+                string codigo = Model.ArticuloCod; // Cambiado de item.ArticuloCod a model.ArticuloCod
+                string nuevoFormato = $"{codigo.Substring(0, 2)}.{codigo.Substring(2, 2)}.{codigo.Substring(4)}";
+            }
+            @nuevoFormato - @Html.DisplayFor(modelItem => Model.ArticuloCodNavigation.ArtDescGen)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Estado)
@@ -43,15 +47,14 @@
             @Html.DisplayFor(model => model.Proceso.Nombre)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UsuarioId)
+            @Html.DisplayNameFor(model => model.Usuario)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UsuarioId)
+            @Html.DisplayFor(model => model.Usuario.Apellido), @Html.DisplayFor(model => model.Usuario.Nombre)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdProgramacion">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.IdProgramacion">Modificar</a>
+    <a class="btn btn-danger" asp-action="Index">Volver</a>
 </div>
- *@

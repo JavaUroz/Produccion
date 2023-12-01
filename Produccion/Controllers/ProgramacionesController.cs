@@ -48,6 +48,7 @@ namespace Producciones.Controllers
             var programacion = await _context.Programacions
                 .Include(p => p.ArticuloCodNavigation)
                 .Include(p => p.Proceso)
+                .Include(p => p.Usuario)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
             {
@@ -67,13 +68,7 @@ namespace Producciones.Controllers
                     Id = a.ArtCodGen,
                     Nombre = $"{a.ArtDescGen} (Cod. {a.ArtCodGen})"
                 }), "Id", "Nombre");
-
-            //ViewData["Estado"] = new SelectList(new[]
-            //{
-            //    new { Value = "En proceso", Text = "En proceso" },
-            //    new { Value = "Pendiente", Text = "Pendiente" },
-            //    new { Value = "Finalizado", Text = "Finalizado" }
-            //}, "Value", "Text");
+            
             ViewData["Proceso"] = new SelectList(_context.Procesos, "IdProceso", "Nombre");
             return View();
         }
@@ -116,12 +111,13 @@ namespace Producciones.Controllers
                 return NotFound();
             }
 
-            var programacion = await _context.Programacions.FindAsync(id);
+            var programacion = await _context.Programacions
+                .FindAsync(id);
             if (programacion == null)
             {
                 return NotFound();
             }
-            programacion.UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
             ViewData["Articulo"] = new SelectList(_context.Articulos
                  .OrderBy(a => a.ArtDescGen) // Ordenar por art_CodDesc = "Descripcion"
                  .Select(a => new
@@ -131,12 +127,13 @@ namespace Producciones.Controllers
                  }), "Id", "Nombre", programacion.ArticuloCod);
             ViewData["Estado"] = new SelectList(new[]
             {
-                new { Value = "Pendiente", Text = "Pendiente" }//,
-                //new { Value = "En proceso", Text = "En proceso" },                
-                //new { Value = "Finalizado", Text = "Finalizado" }
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "En proceso", Text = "En proceso" },                
+                new { Value = "Finalizado", Text = "Finalizado" }
             }, "Value", "Text");
-            ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
-            //ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
+                       
+            ViewData["Proceso"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
+            
             return View(programacion);
         }
         [Authorize(Roles = "Supervisor, Admin")]
@@ -174,7 +171,7 @@ namespace Producciones.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            programacion.UsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
             ViewData["Articulo"] = new SelectList(_context.Articulos
                  .OrderBy(a => a.ArtDescGen) // Ordenar por art_CodDesc = "Descripcion"
                  .Select(a => new
@@ -188,6 +185,7 @@ namespace Producciones.Controllers
                 new { Value = "Pendiente", Text = "Pendiente" },
                 new { Value = "Finalizado", Text = "Finalizado" }
             }, "Value", "Text");
+
             ViewData["ProcesoId"] = new SelectList(_context.Procesos, "IdProceso", "Nombre", programacion.ProcesoId);
             //ViewData["Supervisor"] = new SelectList(_userManager.Users, "Id", "Apellido");//deberia ser rol Supervidor o Admin (No Responsable o User)
             return View(programacion);
@@ -202,9 +200,9 @@ namespace Producciones.Controllers
             }
 
             var programacion = await _context.Programacions
-                .Include(p => p.ArticuloCodNavigation)
-                .Include(p => p.Estado)
+                .Include(p => p.ArticuloCodNavigation)                
                 .Include(p => p.Proceso)
+                .Include(p => p.Usuario)
                 .FirstOrDefaultAsync(m => m.IdProgramacion == id);
             if (programacion == null)
             {

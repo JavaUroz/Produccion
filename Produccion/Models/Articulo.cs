@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Producciones.Models
 {
@@ -9,9 +11,12 @@ namespace Producciones.Models
         {
             Programacions = new HashSet<Programacion>();
         }
-
+        [Key]
+        [DisplayName("Código")]
         public string ArtCodGen { get; set; } = null!;
+        [DisplayName("Descripción")]
         public string? ArtDescGen { get; set; }
+        [DisplayName("Un. Medida")]
         public string? ArtclaCod { get; set; }
         public string? ArtDescAdic { get; set; }
         public string? ArtproCod { get; set; }

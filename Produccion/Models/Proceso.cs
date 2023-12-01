@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Producciones.Models
 {
@@ -11,6 +12,7 @@ namespace Producciones.Models
         }
 
         public int IdProceso { get; set; }
+        [DisplayName("Descripción proceso")]
         public string Nombre { get; set; } = null!;
 
         public virtual ICollection<Programacion> Programacions { get; set; }

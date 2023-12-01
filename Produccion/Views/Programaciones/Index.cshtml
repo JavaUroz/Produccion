@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.Proceso)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ArticuloCod)
+                @Html.DisplayNameFor(model => model.ArticuloCodNavigation)
             </th>            
             <th>
                 @Html.DisplayNameFor(model => model.CantidadProgramada)
@@ -44,13 +44,17 @@
                 @Html.DisplayFor(modelItem => item.Proceso.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ArticuloCodNavigation.ArtDescGen) (@Html.DisplayFor(modelItem => item.ArticuloCod))
+                @{
+                    string codigo = item.ArticuloCod;
+                    string nuevoFormato = $"{codigo.Substring(0, 2)}.{codigo.Substring(2, 2)}.{codigo.Substring(4)}";
+                }
+                @nuevoFormato - @Html.DisplayFor(modelItem => item.ArticuloCodNavigation.ArtDescGen)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CantidadProgramada)
             </td>                        
             <td>
-                @Html.DisplayFor(modelItem => item.Usuario.Apellido), @Html.DisplayFor(modelItem => item.Usuario.Nombre) (@Html.DisplayFor(modelItem => item.Usuario.Email))
+                @Html.DisplayFor(modelItem => item.Usuario.Apellido), @Html.DisplayFor(modelItem => item.Usuario.Nombre)
             </td>
             <td class="d-flex justify-content-end">
                 <div class="row">
