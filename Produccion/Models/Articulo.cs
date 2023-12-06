@@ -10,6 +10,7 @@ namespace Producciones.Models
         public Articulo()
         {
             Programacions = new HashSet<Programacion>();
+            ArticulosProduccions = new HashSet<ArticulosProduccion>();
         }
         [Key]
         [DisplayName("Código")]
@@ -40,6 +41,8 @@ namespace Producciones.Models
         public string? ArtusuCodigo { get; set; }
         public string? ArtAplLoteAut { get; set; }
 
+        public virtual ICollection<ArticulosProduccion> ArticulosProduccions { get; set; }
         public virtual ICollection<Programacion> Programacions { get; set; }
+        
     }
 }

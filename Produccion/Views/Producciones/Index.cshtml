@@ -1,22 +1,33 @@
-﻿@* @using Producciones.Models
+﻿@using Producciones.Models
 
 @model IEnumerable<Produccion>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index producción";
 }
 
-<h1>Index</h1>
+<h1>Listado de producciones</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" title="Cargar nueva producción">
+        <img src="~/img/icons/agregar.svg" width="25" />
+    </a>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CantidadProducida)
+                @Html.DisplayNameFor(model => model.Programacion.Usuario.Sector)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Programacion.OrdenProduccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Programacion.Proceso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Programacion.ArticuloCodNavigation)
+            </th>            
             <th>
                 @Html.DisplayNameFor(model => model.Inicio)
             </th>
@@ -24,13 +35,16 @@
                 @Html.DisplayNameFor(model => model.Fin)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.PartesFaltantes)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Foto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Programacion)
+                @Html.DisplayNameFor(model => model.ResponsableNavigation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ResponsableNavigation)
+                @Html.DisplayNameFor(model => model.Programacion.Estado)
             </th>
             <th></th>
         </tr>
@@ -39,7 +53,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CantidadProducida)
+                @Html.DisplayFor(modelItem => item.Programacion.Usuario.Sector)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programacion.OrdenProduccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programacion.Proceso.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programacion.ArticuloCodNavigation.ArtDescGen)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Inicio)
@@ -48,21 +71,42 @@
                 @Html.DisplayFor(modelItem => item.Fin)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.PartesFaltantes)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Foto)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Programacion.UsuarioId)
+                @Html.DisplayFor(modelItem => item.ResponsableNavigation.Apellido), @Html.DisplayFor(modelItem => item.ResponsableNavigation.Nombre)
             </td>
            <td>
-                @Html.DisplayFor(modelItem => item.ResponsableNavigation.Id)
+                @Html.DisplayFor(modelItem => item.Programacion.Estado)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdProduccion">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdProduccion">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdProduccion">Delete</a>
+            <td class="d-flex justify-content-end">
+                <div class="row">
+                    <div class="col">
+                        <a asp-action="Create" asp-controller="ArticulosProduccions" asp-route-id="@item.IdProduccion" title="Piezas faltantes" class="mr-2">
+                            <img src="~/img/icons/pieza.png" width="20" />
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a asp-action="Edit" asp-route-id="@item.IdProduccion" title="Editar" class="mr-2">
+                            <img src="~/img/icons/editar.svg" width="20" />
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a asp-action="Details" asp-route-id="@item.IdProduccion" title="Detalle">
+                            <img src="~/img/icons/details.svg" width="20" />
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a asp-action="Delete" asp-route-id="@item.IdProduccion" title="Eliminar">
+                            <img src="~/img/icons/borrar.svg" width="20" />
+                        </a>
+                    </div>
+                </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
- *@

@@ -23,6 +23,7 @@ namespace Producciones.Data
         public virtual DbSet<Proceso> Procesos { get; set; } = null!;
         public virtual DbSet<Produccion> Produccions { get; set; } = null!;
         public virtual DbSet<Programacion> Programacions { get; set; } = null!;
+        public virtual DbSet<ArticulosProduccion> ArticulosProduccions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -90,15 +91,24 @@ namespace Producciones.Data
 
                 entity.HasIndex(e => e.ProgramacionId, "IX_Produccions_ProgramacionId");
 
-                entity.HasIndex(e => e.ResposableNavigationId, "IX_Produccions_ResposableNavigationId");
+                entity.HasIndex(e => e.UsuarioId, "IX_Produccions_ResposableNavigationId");
 
                 entity.HasOne(d => d.Programacion)
                     .WithMany(p => p.Produccions)
                     .HasForeignKey(d => d.ProgramacionId);
 
-                entity.HasOne(d => d.ResposableNavigation)
+                entity.HasOne(d => d.ResponsableNavigation)
                     .WithMany(p => p.Produccions)
-                    .HasForeignKey(d => d.ResposableNavigationId);
+                    .HasForeignKey(d => d.UsuarioId);
+            });
+
+            modelBuilder.Entity<ArticulosProduccion>(entity =>
+            {
+                entity.HasKey(e => e.IdArtProd);
+
+                entity.ToTable("ArticulosProduccion");
+
+                entity.Property(e => e.CodGenArt).HasMaxLength(450);
             });
 
             modelBuilder.Entity<Programacion>(entity =>
